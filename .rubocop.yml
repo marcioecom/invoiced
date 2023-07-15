@@ -3,3 +3,12 @@ Style/Documentation:
 
 Style/ClassAndModuleChildren:
   Enabled: false
+
+Metrics/MethodLength:
+  Max: 20
+
+Style/SymbolArray:
+  Enabled: false
+
+Metrics/BlockLength:
+  Max: 30
