@@ -9,8 +9,11 @@ class V1::ContactsController < ApplicationController
   def create
     @contact = Contact.new(contact_params)
 
-    @contact.save
-    render json: @contact, status: :created
+    if @contact.save
+      render json: @contact, status: :created
+    else
+      render json: @contact.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
