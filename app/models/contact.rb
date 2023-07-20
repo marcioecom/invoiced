@@ -5,5 +5,5 @@ class Contact < ApplicationRecord
   validates :last_name, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, presence: true
 
-  belongs_to :user
+  belongs_to :organization
 end

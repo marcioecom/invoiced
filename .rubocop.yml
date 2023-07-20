@@ -12,3 +12,5 @@ Style/SymbolArray:
 
 Metrics/BlockLength:
   Max: 30
+  Exclude:
+    - "db/schema.rb"

@@ -18,6 +18,7 @@ gem 'devise'
 gem 'simple_token_authentication', '~> 1.0'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem 'friendly_id', '~> 5.1'
 gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
