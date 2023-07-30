@@ -2,13 +2,18 @@
 
 Rails.application.routes.draw do
   devise_for :users
-  namespace :v1 do
-    resources :contacts
+  namespace :v1, defaults: { format: :json } do
+    scope ':account_id' do
+      resources :contacts, only: [:index]
+
+      resources :organizations, only: [:create, :update] do
+        resources :contacts, only: [:create, :update, :destroy]
+      end
+    end
+
+    resources :accounts, only: [:create, :update]
+
     resource :sessions, only: [:create, :destroy, :show]
     resources :users, only: [:create]
   end
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end

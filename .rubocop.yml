@@ -14,3 +14,6 @@ Metrics/BlockLength:
   Max: 30
   Exclude:
     - "db/schema.rb"
+
+Style/HashSyntax:
+  Enabled: false

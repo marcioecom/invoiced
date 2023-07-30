@@ -21,7 +21,7 @@ class V1::SessionsController < ApplicationController
     if nilify_token && current_user.save
       head(:ok)
     else
-      head(:unauthorized)
+      render json: { error: current_user.errors }, status: :unprocessable_entity
     end
   end
 
