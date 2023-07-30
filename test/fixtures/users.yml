@@ -8,5 +8,8 @@ one:
   email: 'test_user@example.com'
   authentication_token: 'blah123test'
   confirmed_at: <%= Time.now %>
-# column: value
-#
+
+two:
+  email: <%= Faker::Internet.email %>
+  authentication_token: 'test123'
+  confirmed_at: <%= Time.now %>

@@ -45,12 +45,10 @@ class V1::ContactsController < ApplicationController
 
   def current_account
     @current_account ||= Account.friendly.find(params[:account_id])
-    @current_account
   end
 
   def current_organization
     @current_organization ||= current_account.organizations.friendly.find(params[:organization_id])
-    @current_organization
   end
 
   def contact_params

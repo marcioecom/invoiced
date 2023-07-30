@@ -1,0 +1,9 @@
+leap_stark:
+  name: "Leap Stark inc."
+  slug: "leap-stark-inc"
+  owner: one
+
+another_one:
+  name: <%= Faker::Company.name %>
+  slug: "another-one"
+  owner: two
