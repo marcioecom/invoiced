@@ -74,4 +74,16 @@ class V1::ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_equal last_name, res_contact['lastName']
     assert_equal email, res_contact['email']
   end
+
+  test 'should destroy contact under the correct org' do
+    account = accounts(:leap_stark)
+    org = account.organizations.first
+    contact = contacts(:one)
+
+    delete(
+      v1_organization_contact_path(account_id: account.id, organization_id: org.id, id: contact.id)
+    )
+
+    assert_response :no_content
+  end
 end
