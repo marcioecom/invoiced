@@ -45,4 +45,33 @@ class V1::ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_equal contact['lastName'], last_name
     assert_equal contact['email'], email
   end
+
+  test 'should update contact under the correct org' do
+    account = accounts(:leap_stark)
+    org = account.organizations.first
+    contact = contacts(:one)
+
+    first_name = Faker::Name.name
+    last_name = Faker::Name.name
+    email = Faker::Internet.email
+
+    put(
+      v1_organization_contact_path(account_id: account.id, organization_id: org.id, id: contact.id),
+      params: {
+        contact: {
+          first_name: first_name,
+          last_name: last_name,
+          email: email
+        }
+      }
+    )
+
+    assert_response :ok
+
+    res_contact = JSON.parse(@response.body)['data']['contact']
+
+    assert_equal first_name, res_contact['firstName']
+    assert_equal last_name, res_contact['lastName']
+    assert_equal email, res_contact['email']
+  end
 end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class V1::ContactsController < ApplicationController
+  include V1::Contacts::Response
+
   def index
     @contacts = current_account.contacts.order(created_at: :desc)
 
@@ -8,37 +10,25 @@ class V1::ContactsController < ApplicationController
   end
 
   def create
-    @contact = current_organization.contacts.build(contact_params)
+    contact = current_organization.contacts.build(contact_params)
 
-    if @contact.save
-      render :create, status: :created
-    else
-      render json: @contact.errors, status: :unprocessable_entity
-    end
+    create_and_reder_contact(contact) || render_invalid_response(contact)
   end
 
   def update
-    @contact = current_organization.contacts.find(params[:id])
+    contact = current_organization.contacts.find(params[:id])
 
-    return render json: { error: 'contact not found' }, status: :not_found if @contact.nil?
+    return render json: { error: 'contact not found' }, status: :not_found if contact.nil?
 
-    if @contact.update(contact_params)
-      render :update, status: :ok
-    else
-      render json: @contact.errors, status: :unprocessable_entity
-    end
+    update_and_render_contact(contact, contact_params) || render_invalid_response(contact)
   end
 
   def destroy
-    @contact = current_organization.contacts.find(params[:id])
+    contact = current_organization.contacts.find(params[:id])
 
-    return render json: { error: 'contact not found' }, status: :not_found if @contact.nil?
+    return render json: { error: 'contact not found' }, status: :not_found if contact.nil?
 
-    if @contact.destroy
-      head(:no_content)
-    else
-      head(:unprocessable_entity)
-    end
+    destroy_and_render_contact(contact) || render_invalid_response(contact)
   end
 
   private
