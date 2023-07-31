@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :accounts, only: [:create, :update]
+    resources :accounts, only: [:index, :create, :update]
 
     resource :sessions, only: [:create, :destroy, :show]
     resources :users, only: [:create]
