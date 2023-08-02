@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       resources :contacts, only: [:index]
 
       resources :organizations, only: [:index, :show, :create, :update] do
-        resources :contacts, only: [:create, :update, :destroy]
+        resources :contacts, only: [:index, :create, :update, :destroy]
       end
     end
 
