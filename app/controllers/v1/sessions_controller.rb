@@ -11,7 +11,13 @@ class V1::SessionsController < ApplicationController
     return render json: { error: 'user not found' }, status: :not_found if @user.nil?
 
     if @user.valid_password?(params[:password])
-      render :create, status: :created
+      jwt = JWT.encode(
+        { user_id: @user.id, exp: (Time.now + 2.weeks).to_i },
+        Rails.application.secrets.secret_key_base,
+        'HS256'
+      )
+
+      render :create, status: :created, locals: { token: jwt }
     else
       head(:unauthorized)
     end
