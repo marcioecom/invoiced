@@ -5,6 +5,7 @@ require 'test_helper'
 class V1::OrganizationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     user = users(:one)
+    @account = accounts(:leap_stark)
 
     @header = {
       'X-User-Email': user.email,
@@ -12,17 +13,31 @@ class V1::OrganizationsControllerTest < ActionDispatch::IntegrationTest
     }
   end
 
-  test 'should create organization under the correct account' do
-    account = accounts(:leap_stark)
+  test 'lists out organizations for account' do
+    org_one = organizations(:one)
+    org_two = organizations(:two)
 
+    get v1_organizations_path(@account)
+
+    organization_ids = JSON.parse(@response.body)['data'].map do |org|
+      org['id']
+    end
+
+    assert_response :success
+    assert_includes organization_ids, org_one.id
+    assert_not_includes organization_ids, org_two.id
+  end
+
+  test 'should create organization under the correct account' do
     organization_params = {
       name: Faker::Company.name,
       address: Faker::Address.full_address,
       tax_payer_number: Faker::Company.ein
     }
 
-    post v1_organizations_path(
-      account_id: account.id,
+    post(
+      v1_organizations_path(@account),
+      headers: @header,
       params: { organization: organization_params }
     )
 
@@ -35,20 +50,23 @@ class V1::OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert organization['tax_payer_number'] == organization_params[:tax_payer_number]
   end
 
-  test 'lists out organizations for account' do
-    account = accounts(:leap_stark)
+  test 'should return unprocessable entity' do
+    organization_params = {
+      name: Faker::Company.name,
+      tax_payer_number: ''
+    }
 
-    org_one = organizations(:one)
-    org_two = organizations(:two)
+    post(
+      v1_organizations_path(@account),
+      headers: @header,
+      params: { organization: organization_params }
+    )
 
-    get v1_organizations_path(account_id: account.id)
+    assert_response :unprocessable_entity
 
-    organization_ids = JSON.parse(@response.body)['data'].map do |org|
-      org['id']
-    end
+    response = JSON.parse(@response.body)['errors']
 
-    assert_response :success
-    assert_includes organization_ids, org_one.id
-    assert_not_includes organization_ids, org_two.id
+    assert response['address'].include?("can't be blank")
+    assert response['tax_payer_number'].include?("can't be blank")
   end
 end
