@@ -69,4 +69,18 @@ class V1::OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert response['address'].include?("can't be blank")
     assert response['tax_payer_number'].include?("can't be blank")
   end
+
+  test 'should return specific organization' do
+    organization = organizations(:one)
+
+    get v1_organization_path(@account, id: organization.id)
+
+    assert_response :success
+
+    response = JSON.parse(@response.body)['data']['organization']
+
+    assert response['name'] == organization.name
+    assert response['address'] == organization.address
+    assert response['tax_payer_number'] == organization.tax_payer_number
+  end
 end

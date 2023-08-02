@@ -6,6 +6,16 @@ class V1::OrganizationsController < ApplicationController
     render :index, locals: { organizations: organizations }
   end
 
+  def show
+    organization = current_account.organizations.find_by(id: params[:id])
+
+    if organization
+      render :show, locals: { organization: organization }
+    else
+      render json: { errors: 'organization not found' }, status: :not_found
+    end
+  end
+
   def create
     organization = current_account.organizations.build(organization_params)
 
