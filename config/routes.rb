@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     scope ':account_id' do
       resources :contacts, only: [:index]
 
-      resources :organizations, only: [:create, :update] do
+      resources :organizations, only: [:index, :create, :update] do
         resources :contacts, only: [:create, :update, :destroy]
       end
     end
