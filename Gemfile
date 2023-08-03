@@ -15,8 +15,8 @@ gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
 
 gem 'devise'
-gem 'simple_token_authentication', '~> 1.0'
 gem 'jwt'
+gem 'simple_token_authentication', '~> 1.0'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'friendly_id', '~> 5.1'

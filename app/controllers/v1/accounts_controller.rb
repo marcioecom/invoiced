@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class V1::AccountsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     accounts = current_user.accounts
     render :index, locals: { accounts: accounts }
